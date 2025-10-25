@@ -34,6 +34,7 @@
 
 # Output files
 Output/
+main
 
 # vs code
 .vscode/
