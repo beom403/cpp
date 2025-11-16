@@ -1,12 +1,16 @@
 #include <cstdint>
 #include <iostream>
+#include "Logger.hpp"
 
 template <typename T>
 class SamTestCaseTemplate
 {
 public:
     // methodes
-    SamTestCaseTemplate(uint32_t nTicketNumber) : m_nTicketNumber(nTicketNumber) {};
+    SamTestCaseTemplate(uint32_t nTicketNumber) : m_nTicketNumber(nTicketNumber)
+    {
+        m_Log.SetCaller("TestCase Ticket#" + std::to_string(nTicketNumber));
+    };
 
     SamTestCaseTemplate& SetPreProc(T PreProcess)
     {
@@ -29,20 +33,19 @@ public:
     bool ExecuteTestCase(void)
     {
         bool bRet = true;
-        std::cout << "Executing test case for ticket number: " << m_nTicketNumber << std::endl;
         if (m_PreProcess)
         {
-            std::cout << "Executing pre-process function." << std::endl;
+            m_Log.LogInfo("Executing pre-process function.");
             bRet &= m_PreProcess();
         }
         if (m_MainProcess)
         {
-            std::cout << "Main test case execution logic goes here." << std::endl;
+            m_Log.LogInfo("Executing main-process function.");
             bRet &= m_MainProcess();
         }
         if (m_PostProcess)
         {
-            std::cout << "Executing post-process function." << std::endl;
+            m_Log.LogInfo("Executing post-process function.");
             bRet &= m_PostProcess();
         }
         return bRet;
@@ -54,4 +57,5 @@ protected:
     T m_PreProcess{};
     T m_MainProcess{};
     T m_PostProcess{};
+    Logger m_Log;
 };

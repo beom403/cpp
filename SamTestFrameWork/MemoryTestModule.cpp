@@ -1,39 +1,67 @@
 #include <cstdint>
-#include <iostream>
+#include <typeinfo>
+#include "Logger.hpp"
 
-constexpr uint32_t CORE_ID = 1;
+constexpr uint32_t CORE_ID = 0;
 
-class HCoreTargetAccessTest
+class BaseTestModule
 {
 public:
+    BaseTestModule()
+    {
+        m_Log.SetCaller(__PRETTY_FUNCTION__);
+    }
+protected:
+    Logger m_Log;
+};
+
+class HCoreTargetAccessTest : public BaseTestModule
+{
+public:
+    HCoreTargetAccessTest()
+    {
+        m_Log.SetCaller(__func__);
+    }
+
     bool operator()(void)
     {
         if (CORE_ID != 0)
         {
-            std::cout << "test executed on core ID: " << CORE_ID << std::endl;
+            m_Log.LogInfo("HCore access test skipped for non-core 0.");
             return true;
         }
-        std::cout << "Single access test executed." << std::endl;
+        m_Log.LogInfo("test start.");
+        m_Log.LogInfo("test done.");
         return true;
     }
 };
 
-class SequentialAccessTest
+class SequentialAccessTest : public BaseTestModule
 {
 public:
+    SequentialAccessTest()
+    {
+        m_Log.SetCaller(__func__);
+    }
     bool operator()(void)
     {
-        std::cout << "Single access test executed." << std::endl;
+        m_Log.LogInfo("test start.");
+        m_Log.LogInfo("test done.");
         return true;
     }
 };
 
-class SimultaneousAccessTest
+class SimultaneousAccessTest : public BaseTestModule
 {
 public:
+    SimultaneousAccessTest()
+    {
+        m_Log.SetCaller(__func__);
+    }
     bool operator()(void)
     {
-        std::cout << "Simultaneous access test executed." << std::endl;
+        m_Log.LogInfo("test start.");
+        m_Log.LogInfo("test done.");
         return true;
     }
 };

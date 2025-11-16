@@ -2,12 +2,14 @@
 #include <functional>
 #include "SamTestCaseTemplate.hpp"
 #include "MemoryTestModule.cpp"
+#include "Logger.hpp"
 
 class BasicTestPlan
 {
 public:
     BasicTestPlan(void)
     {
+        m_Log.SetCaller(__func__);
         //////////////////////////////////////////////////////////////////////////////
         // create test modules
         //////////////////////////////////////////////////////////////////////////////
@@ -36,6 +38,7 @@ public:
 
     void RunAllTests(void)
     {
+        m_Log.LogInfo("Starting all test cases execution.");
         for (auto testCase : m_TestCases)
         {
             testCase->ExecuteTestCase();
@@ -43,4 +46,5 @@ public:
     };
 private:
     std::vector<SamTestCaseTemplate<std::function<bool()>>*> m_TestCases;
+    Logger m_Log;
 };
