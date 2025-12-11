@@ -38,3 +38,10 @@ main
 
 # vs code
 .vscode/
+
+# output directories
+build/
+
+# CMake files
+CMakeFiles/
+Makefile
